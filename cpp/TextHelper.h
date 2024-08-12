@@ -1,12 +1,15 @@
 /*
  * @Author: zhuqingquan zqq_222@163.com
  * @Date: 2024-08-12 
- * @FilePath: /zutils/cpp/libtext.h
+ * @FilePath: /zutils/cpp/TextHelper.h
  * @Description: some helper function for text
  */
 #include <string>
 #include <vector>
 #include <map>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace zutils
 {

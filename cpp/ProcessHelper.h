@@ -33,6 +33,11 @@ private:
     int m_tid = 0;
 };//class Process
 
+
+bool killProcessByPID(DWORD pid);
+
+bool killProcessByName(const std::wstring& processName);
+
 }//namespace zutils
 
 #endif/ _Z_UTILS_PROCESS_H_

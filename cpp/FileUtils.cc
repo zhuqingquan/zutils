@@ -9,6 +9,7 @@
 #include <fstream>
 #include <filesystem>
 #include <vector>
+#include "TextHelper.h"
 #include "minizip/unzip.h"
 
 int zutils::unzipFile(const std::string& zipFilePath, const std::string& destDir)
@@ -44,7 +45,12 @@ int zutils::unzipFile(const std::string& zipFilePath, const std::string& destDir
                 return -4;
             }
 
+#ifdef _WIN32
+            std::wstring wfullPath = zutils::string2wstring(fullPath);
+            std::ofstream outFile(wfullPath, std::ios::binary);
+#else
             std::ofstream outFile(fullPath, std::ios::binary);
+#endif
             if (!outFile) {
                 //std::cerr << "Cannot create file: " << fullPath << std::endl;
                 unzCloseCurrentFile(zipFile);
