@@ -7,6 +7,7 @@
 #include "FileUtils.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <filesystem>
 #include <vector>
 #include "TextHelper.h"
@@ -71,4 +72,17 @@ int zutils::unzipFile(const std::string& zipFilePath, const std::string& destDir
 
     unzClose(zipFile);
     return 0;
+}
+
+std::string zutils::readFile(const std::string& filePath)
+{
+    std::ifstream fileStream(filePath);
+    if (!fileStream.is_open())
+    {
+        return "";
+    }
+
+    std::stringstream buffer;
+    buffer << fileStream.rdbuf();
+    return buffer.str();
 }

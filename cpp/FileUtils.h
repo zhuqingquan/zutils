@@ -12,6 +12,7 @@
 
 namespace zutils
 {
+    std::string readFile(const std::string& filePath);
     int unzipFile(const std::string& zipFilePath, const std::string& destDir);
 }//namespace zutils
 #endif// _Z_UTILS_FILE_UTILS_H_

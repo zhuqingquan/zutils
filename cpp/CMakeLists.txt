@@ -20,4 +20,5 @@ target_include_directories(zutils PUBLIC
         ${CMAKE_BINARY_DIR}
         ${CMAKE_SOURCE_DIR}/minizip
 )
-#add_subdirectory(test zutils_test)
+
+add_subdirectory(test zutils_test)
