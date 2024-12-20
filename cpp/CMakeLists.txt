@@ -13,7 +13,12 @@ if(WIN32)
     add_definitions(-DUNICODE -D_UNICODE)
 endif()
 
-add_library(zutils STATIC FileUtils.cc TextHelper.cpp TextHelper.h ProcessHelper.cc ProcessHelper.h )
+add_library(zutils STATIC 
+    FileUtils.cc 
+    TextHelper.cpp TextHelper.h 
+    ProcessHelper.cc ProcessHelper.h 
+    ThreadTaskHandler.cpp
+)
 set_target_properties(zutils PROPERTIES CXX_STANDARD 17)
 
 target_include_directories(zutils PUBLIC 
