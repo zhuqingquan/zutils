@@ -9,21 +9,24 @@ set(MZ_FORCE_FETCH_LIBS ON)
 add_subdirectory(minizip)
 set_target_properties(minizip PROPERTIES CXX_STANDARD 17)
 
+set(SRC_LIST FileUtils.cc TextHelper.cpp)
+
 if(WIN32)
     add_definitions(-DUNICODE -D_UNICODE)
+    list(APPEND SRC_LIST ProcessHelper.cc)
 endif()
 
 add_library(zutils STATIC 
-    FileUtils.cc 
-    TextHelper.cpp TextHelper.h 
-    ProcessHelper.cc ProcessHelper.h 
+    ${SRC_LIST}
+    FilePathHelper.cpp
     ThreadTaskHandler.cpp
+    zlog.cpp
 )
 set_target_properties(zutils PROPERTIES CXX_STANDARD 17)
 
 target_include_directories(zutils PUBLIC 
-        ${CMAKE_BINARY_DIR}
-        ${CMAKE_SOURCE_DIR}/minizip
+        ${CMAKE_BINARY_DIR}/zutils/
+        ${PROJECT_SOURCE_DIR}/minizip
 )
 
 add_subdirectory(test zutils_test)

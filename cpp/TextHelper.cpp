@@ -1,15 +1,18 @@
 // TextHelper.cpp : Defines the exported functions for the DLL application.
 //
 
+#ifdef _WINDOWS
 #include <windows.h>
+#include <tchar.h>
+#endif
 #include <algorithm>  
 #include <functional>
 #include <iostream>
 #include <fstream>
-#include <tchar.h>
 #include <assert.h>
 #include <codecvt>
 #include <locale>
+#include <stdarg.h>
 #include "TextHelper.h"
 
 using namespace std;
@@ -35,13 +38,35 @@ vector<wstring> split(const wstring &str, const wstring &delimiter)
 	return ret;
 }
 
+vector<string> split(const string &str, const string &delimiter)
+{
+	vector<string> ret;
+	size_t last = 0;
+	size_t index = str.find_first_of(delimiter,last);
+	while ( index != string::npos )
+	{
+		ret.push_back(str.substr(last,index-last));
+		last = index + 1;
+		index = str.find_first_of(delimiter,last);
+	}
+	if ( index - last > 0 )
+	{
+		ret.push_back(str.substr(last ,index - last));
+	}
+	return ret;
+}
+
 wstring format(wstring fmt, ...)
 {
 	wchar_t buffer[4096] = {0};
 
 	va_list valist;
 	va_start(valist, fmt);
+#ifdef _WINDOWS
 	_vsnwprintf(buffer, sizeof(buffer)/sizeof(wchar_t), fmt.c_str(), valist);
+#else
+	vswprintf(buffer, sizeof(buffer)/sizeof(wchar_t), fmt.c_str(), valist);
+#endif
 	va_end(valist);
 
 	return wstring(buffer);
@@ -59,16 +84,16 @@ string format(string fmt, ...)
 	return string(buffer);
 }
 
-wstring Int64ToWString(__int64 v)
+wstring Int64ToWString(int64_t v)
 {
 	wchar_t buf[128] = {0};
 	swprintf(buf, 128, L"%lld", v);
-	return wstring(buf);
+	return std::move(wstring(buf));
 }
 
-__int64 wstringToInt64(const wstring& str)
+int64_t wstringToInt64(const wstring& str)
 {
-	__int64 v = 0;
+	int64_t v = 0;
 	swscanf(str.c_str(), L"%lld", &v);
 	return v;
 }
@@ -144,6 +169,7 @@ string wstring2string(const wstring &wstr)
     return converter.to_bytes(wstr);
 }
 
+#ifdef _WINDOWS
 string UTF8_To_string(const string & str)
 {
 	int nwLen = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0);
@@ -229,6 +255,20 @@ wstring UTF8_To_wstring(const string & str)
 
 	return retStr;
 } 
+#else
+string UTF8_To_string(const string & str) { return str; }
+string string_To_UTF8(const string & str) { return str; }
+string wstring_To_UTF8(const wstring & str)
+{
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    return converter.to_bytes(str);
+}
+wstring UTF8_To_wstring(const string & str)
+{
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	return converter.from_bytes(str);
+}
+#endif
 
 bool contains(const wstring& str, const wstring& substr)
 {
@@ -328,8 +368,11 @@ wstring endWString(const wstring& str, const int num)
 wstring readFromFile(wstring path)
 {
 	string str;
-	//ifstream fs(zutils::wstring2string(path).c_str());
+#ifdef _WINDOWS
 	ifstream fs(path.c_str());
+#else
+	ifstream fs(zutils::wstring2string(path).c_str());
+#endif
 	int a = fs.get();
 	int b = fs.get();
 	int c = fs.get();
@@ -356,8 +399,11 @@ wstring readFromFileAsSingleLine(wstring path)
 
 void writeToFile(wstring str, wstring path)
 {
-	//ofstream fs(zutils::wstring2string(path).c_str());
+#ifdef _WINDOWS
 	ofstream fs(path.c_str());
+#else
+	ofstream fs(zutils::wstring2string(path).c_str());
+#endif
 	unsigned char bom[] = { 0xEF,0xBB,0xBF };
     fs.write((char*)bom, sizeof(bom));
 	string text = zutils::wstring_To_UTF8(str);
@@ -502,6 +548,7 @@ bool rtsp_url_password(const string& url, string& name, string& password, string
 	return true;
 }
 
+#ifdef _WINDOWS
 BOOL str2Guid(const std::wstring& szGUID, GUID& outGuid)
 {
 	if (szGUID.empty())
@@ -541,5 +588,5 @@ std::wstring guid2Str(GUID *guid)
 		guid->Data4[6], guid->Data4[7]);
 	return guid_string;  
 }
-
+#endif//_WINDOWS
 }

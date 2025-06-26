@@ -165,7 +165,7 @@ private:
     std::mutex m_mutexCBTasks;          // mutex for callback tasks
     std::condition_variable m_cvCBTasks;    // conditian variable for callback tasks
     std::deque<ThreadTask> m_cbTasks;   // list of callback tasks
-    std::atomic<bool> m_isRunning = false;
+    std::atomic<bool> m_isRunning {false};
 };//ThreadPool
 }//namespace zUtils
 #endif//_THREAD_TASK_DISPATCHER_H_

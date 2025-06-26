@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <inttypes.h>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -19,11 +20,12 @@ namespace zutils
 	using std::map;
 
 	vector<wstring> split(const wstring &str, const wstring &delimiter);
+	vector<string> split(const string &str, const string &delimiter);
 	wstring format(wstring fmt, ...);
 	string format(string fmt, ...);
 
-	wstring Int64ToWString(__int64 v);
-	__int64 wstringToInt64(const wstring& str);
+	wstring Int64ToWString(int64_t v);
+	int64_t wstringToInt64(const wstring& str);
 	wstring IntToWString(int v);
 	int wstringToInt(const wstring& str);
 	wstring UIntToWString(unsigned int v);
@@ -70,7 +72,9 @@ namespace zutils
 	//解析rtsp的url，将url中的用户名和密码提取出来，并生成一个新的不包含用户名密码的url
 	bool rtsp_url_password(const string& url, string& name, string& password, string& newUrl);
 
+#ifdef _WINDOWS
 	//GUID与STR转换
 	BOOL str2Guid(const std::wstring& strGUID, GUID& Guid);
 	std::wstring guid2Str(GUID *guid);
+#endif
 }
