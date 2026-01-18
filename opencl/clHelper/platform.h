@@ -95,7 +95,17 @@ namespace clHelper {
   /*! return the number of platforms in the system */
   size_t getNumPlatforms();
     
-  std::shared_ptr<Platform> getPlatformInfo(size_t platformID);
+  /**
+   * @brief Get the Platform Info by index
+   * @param platformIndex
+   * @return std::shared_ptr<Platform> 
+   */
+  std::shared_ptr<Platform> getPlatformInfo(size_t platformIndex);
+  /**
+   * @brief Get the Platform Info object of Index 0
+   * @return std::shared_ptr<Platform> 
+   */
+  std::shared_ptr<Platform> getPlatformInfo() { return getPlatformInfo(0); };
 
 } // ::clHelper
 
