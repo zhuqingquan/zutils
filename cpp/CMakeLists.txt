@@ -21,6 +21,8 @@ add_library(zutils STATIC
     FilePathHelper.cpp
     ThreadTaskHandler.cpp
     zlog.cpp
+    wave-reader.cc
+    wave-writer.cc
 )
 set_target_properties(zutils PROPERTIES CXX_STANDARD 17)
 
