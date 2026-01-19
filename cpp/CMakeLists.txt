@@ -8,6 +8,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(MZ_FORCE_FETCH_LIBS ON)
 add_subdirectory(minizip)
 set_target_properties(minizip PROPERTIES CXX_STANDARD 17)
+include_directories(${CMAKE_BINARY_DIR})
 
 set(SRC_LIST FileUtils.cc TextHelper.cpp)
 

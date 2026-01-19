@@ -6,8 +6,9 @@ TEST(FileUtilsTest, readFile)
     std::string filePath = "test.txt";
     std::string content = zutils::readFile(filePath);
     EXPECT_EQ(content, "hello world");
-
+#ifdef WIN32
     std::string exeFilePath = "C:\\Windows\\regedit.exe";
     std::string exeContent = zutils::readFile(exeFilePath);
     EXPECT_FALSE(exeContent.empty());
+#endif
 }
